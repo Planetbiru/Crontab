@@ -1,0 +1,19 @@
+{
+    "name": "planetbiru/crontab",
+    "description": "Crontab",
+    "license": "GPL-3.0-only",
+    "autoload": {
+        "psr-4": {
+            "Crontab\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kamshory"
+        }
+    ],
+    "require": {
+        "pear/net_ssh2": "dev-master",
+        "divineomega/php-ssh-connection": "^2.2"
+    }
+}
