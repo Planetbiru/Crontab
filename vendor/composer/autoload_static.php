@@ -40,19 +40,8 @@ class ComposerStaticInitb525bf3a1a472eb054a690d58627b3e8
         ),
     );
 
-    public static $prefixesPsr0 = array (
-        'N' => 
-        array (
-            'Net' => 
-            array (
-                0 => __DIR__ . '/..' . '/pear/net_ssh2',
-            ),
-        ),
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -60,7 +49,6 @@ class ComposerStaticInitb525bf3a1a472eb054a690d58627b3e8
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb525bf3a1a472eb054a690d58627b3e8::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb525bf3a1a472eb054a690d58627b3e8::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb525bf3a1a472eb054a690d58627b3e8::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitb525bf3a1a472eb054a690d58627b3e8::$classMap;
 
         }, null, ClassLoader::class);

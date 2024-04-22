@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'PEAR_Exception' => $vendorDir . '/pear/pear_exception/PEAR/Exception.php',
 );

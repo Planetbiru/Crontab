@@ -3,6 +3,7 @@
 namespace Crontab;
 
 use Crontab\Exception\InvalidServerException;
+use DivineOmega\SSHConnection\SSHConnection;
 use Exception;
 use InvalidArgumentException;
 use Net_SSH2_LibSSH2;
@@ -34,9 +35,9 @@ class CrontabManager
      */
     private $handle;
     /**
-     * Net_SSH2_LibSSH2
+     * SSHConnection
      *
-     * @var Net_SSH2_LibSSH2
+     * @var SSHConnection
      */
     private $ssh;
     
@@ -55,6 +56,13 @@ class CrontabManager
     private $output = "";
     
     /**
+     * Error
+     *
+     * @var string
+     */
+    private $error = "";
+    
+    /**
      * Return
      *
      * @var string
@@ -69,13 +77,19 @@ class CrontabManager
         $this->cronFile = "{$this->path}{$this->handle}";
         $this->username = $username;
         $this->password = $password;
-        echo "AAAAAAAA ";
-        print_r($this->ssh);
+        
         try {
             if (is_null($host) || is_null($port) || is_null($username) || is_null($password)) {
                 throw new InvalidServerException("Please specify the host, port, username and password!");
             }
-            $this->ssh = new Net_SSH2_LibSSH2($host, $port);
+            $this->ssh = (new SSHConnection())
+            ->to($host)
+            ->onPort($port)
+            ->as($username)
+            ->withPassword($password)
+         // ->withPrivateKey($privateKeyPath)
+         // ->timeout(0)
+            ->connect();
             
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -93,14 +107,16 @@ class CrontabManager
             $arguments = func_get_args();
             $command_string = ($argument_count > 1) ? implode(" && ", $arguments) : $arguments[0];
             $command_string .= "\r\n";
-            $options = array(
-                'command'=>$command_string,
-                'login_name'=>$this->username,
-                'password'=>$this->password
-            );
-            $this->ssh->sshExec($output, $return, $options);
-            $this->output = $output;
-            $this->return = $return;
+           
+            
+            $command = $this->ssh->run($command_string);
+
+            $command->getOutput();  // 'Hello World'
+            $command->getError();   // ''
+
+            
+            $this->output = $command->getOutput();
+            $this->error = $command->getError();
         } catch (Exception $e) {
             $this->errorMessage($e->getMessage());
         }
@@ -185,5 +201,15 @@ class CrontabManager
     public function getReturn()
     {
         return $this->return;
+    }
+
+    /**
+     * Get error
+     *
+     * @return  string
+     */ 
+    public function getError()
+    {
+        return $this->error;
     }
 }

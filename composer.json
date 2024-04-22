@@ -13,7 +13,6 @@
         }
     ],
     "require": {
-        "pear/net_ssh2": "dev-master",
         "divineomega/php-ssh-connection": "^2.2"
     }
 }
